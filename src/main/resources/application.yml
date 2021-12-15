@@ -1,0 +1,51 @@
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+spring:
+  shardingsphere:
+    datasource:
+      ds0:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.1:3306/db?serverTimezone=GMT%2b8
+        password: southgis123
+        type: com.zaxxer.hikari.HikariDataSource
+        username: southgis
+      ds1:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.1:3306/db2?serverTimezone=GMT%2b8
+        password: southgis123
+        type: com.zaxxer.hikari.HikariDataSource
+        username: southgis
+      ds2:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.1:3306/db3?serverTimezone=GMT%2b8
+        password: southgis123
+        type: com.zaxxer.hikari.HikariDataSource
+        username: southgis
+      ds3:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://192.168.159.1:3306/db4?serverTimezone=GMT%2b8
+        password: southgis123
+        type: com.zaxxer.hikari.HikariDataSource
+        username: southgis
+      names: ds0,ds1,ds2,ds3
+    props:
+      sql-show: true
+    rules:
+      sharding:
+        sharding-algorithms:
+          myalgorithm:
+            props:
+              sharding-count: '2'
+            type: HASH_MOD
+        tables:
+          t_order:
+            actual-data-nodes: ds$->{0..3}.t_order_$->{0..1}
+            database-strategy:
+              standard:
+                sharding-algorithm-name: myalgorithm
+                sharding-column: order_id
+            tableStrategy:
+              standard:
+                sharding-algorithm-name: myalgorithm
+                sharding-column: order_id
